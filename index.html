@@ -212,25 +212,25 @@
     }
   });
 
-  // Touch Events
   ball.addEventListener("touchstart", (e) => {
-    isDragging = true;
-  });
+  e.preventDefault();
+  isDragging = true;
+}, { passive: false });
 
-  window.addEventListener("touchmove", (e) => {
-    if (isDragging && e.touches.length > 0) {
-      const touch = e.touches[0];
-      ball.style.left = touch.pageX - 40 + "px";
-      ball.style.top = touch.pageY - 40 + "px";
-    }
-  });
+window.addEventListener("touchmove", (e) => {
+  if (isDragging && e.touches.length > 0) {
+    const touch = e.touches[0];
+    ball.style.left = touch.pageX - 40 + "px";
+    ball.style.top = touch.pageY - 40 + "px";
+  }
+}, { passive: false });
 
-  window.addEventListener("touchend", () => {
-    if (isDragging) {
-      isDragging = false;
-      checkGoal();
-    }
-  });
+window.addEventListener("touchend", () => {
+  if (isDragging) {
+    isDragging = false;
+    checkGoal();
+  }
+});
 </script>
 
   </body>
