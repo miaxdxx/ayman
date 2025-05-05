@@ -195,6 +195,26 @@
         }
       });
 
+      // Touch Events
+  ball.addEventListener("touchstart", (e) => {
+    isDragging = true;
+  });
+
+  window.addEventListener("touchmove", (e) => {
+    if (isDragging && e.touches.length > 0) {
+      const touch = e.touches[0];
+      ball.style.left = touch.pageX - 40 + "px";
+      ball.style.top = touch.pageY - 40 + "px";
+    }
+  });
+
+  window.addEventListener("touchend", () => {
+    if (isDragging) {
+      isDragging = false;
+      checkGoal();
+    }
+  });
+
       function checkGoal() {
         const ballRect = ball.getBoundingClientRect();
         const goalRect = goal.getBoundingClientRect();
@@ -208,7 +228,7 @@
           goalSound.play();
           setTimeout(() => {
             nextScene();
-          }, 800); // wait a bit for sound to play
+          }, 800); 
         }
       }
     </script>
