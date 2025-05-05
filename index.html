@@ -149,53 +149,70 @@
       />
     </audio>
 
-    <script>
-      let currentScene = 1;
+<script>
+  let currentScene = 1;
 
-      function nextScene() {
-        document
-          .getElementById(`scene${currentScene}`)
-          .classList.remove("active");
-        currentScene++;
-        document.getElementById(`scene${currentScene}`).classList.add("active");
-      }
+  function nextScene() {
+    document.getElementById(`scene${currentScene}`).classList.remove("active");
+    currentScene++;
+    document.getElementById(`scene${currentScene}`).classList.add("active");
+  }
 
-      // Move "No" button randomly
-      const noBtn = document.getElementById("noBtn");
-      noBtn.addEventListener("mouseover", () => {
-        noBtn.style.position = "absolute";
-        noBtn.style.top = `${Math.random() * 80 + 10}%`;
-        noBtn.style.left = `${Math.random() * 80 + 10}%`;
-      });
+  // Move "No" button randomly
+  const noBtn = document.getElementById("noBtn");
+  noBtn.addEventListener("mouseover", () => {
+    noBtn.style.position = "absolute";
+    noBtn.style.top = `${Math.random() * 80 + 10}%`;
+    noBtn.style.left = `${Math.random() * 80 + 10}%`;
+  });
 
-      function yesClicked() {
+  function yesClicked() {
+    nextScene();
+  }
+
+  const ball = document.getElementById("ball");
+  const goal = document.getElementById("goal");
+  const goalSound = document.getElementById("goalSound");
+
+  let isDragging = false;
+
+  function checkGoal() {
+    const ballRect = ball.getBoundingClientRect();
+    const goalRect = goal.getBoundingClientRect();
+
+    if (
+      ballRect.left > goalRect.left &&
+      ballRect.right < goalRect.right &&
+      ballRect.top > goalRect.top &&
+      ballRect.bottom < goalRect.bottom
+    ) {
+      goalSound.play();
+      setTimeout(() => {
         nextScene();
-      }
+      }, 800);
+    }
+  }
 
-      // Drag and Drop Goal
-      const ball = document.getElementById("ball");
-      const goal = document.getElementById("goal");
-      const goalSound = document.getElementById("goalSound");
+  // Mouse Events
+  ball.addEventListener("mousedown", () => {
+    isDragging = true;
+  });
 
-      let isDragging = false;
+  window.addEventListener("mouseup", () => {
+    if (isDragging) {
+      isDragging = false;
+      checkGoal();
+    }
+  });
 
-      ball.addEventListener("mousedown", () => {
-        isDragging = true;
-      });
+  window.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      ball.style.left = e.pageX - 40 + "px";
+      ball.style.top = e.pageY - 40 + "px";
+    }
+  });
 
-      window.addEventListener("mouseup", () => {
-        isDragging = false;
-        checkGoal();
-      });
-
-      window.addEventListener("mousemove", (e) => {
-        if (isDragging) {
-          ball.style.left = e.pageX - 40 + "px";
-          ball.style.top = e.pageY - 40 + "px";
-        }
-      });
-
-      // Touch Events
+  // Touch Events
   ball.addEventListener("touchstart", (e) => {
     isDragging = true;
   });
@@ -214,23 +231,7 @@
       checkGoal();
     }
   });
+</script>
 
-      function checkGoal() {
-        const ballRect = ball.getBoundingClientRect();
-        const goalRect = goal.getBoundingClientRect();
-
-        if (
-          ballRect.left > goalRect.left &&
-          ballRect.right < goalRect.right &&
-          ballRect.top > goalRect.top &&
-          ballRect.bottom < goalRect.bottom
-        ) {
-          goalSound.play();
-          setTimeout(() => {
-            nextScene();
-          }, 800); 
-        }
-      }
-    </script>
   </body>
 </html>
